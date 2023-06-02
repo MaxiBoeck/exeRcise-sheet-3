@@ -136,15 +136,32 @@ head(df2, n=2)
 
 e)  Combine both datasets into one using `bind_rows()`.
 
+```{r setup, include=FALSE}
+install.packages("dplyr")
+```
+
+
 ```{r}
+library(dplyr)
 df3 <-bind_rows(df, df2)
 head(df3, n=5)
+df3
 ```
 
 
 f)  Combine the counts for same names to determine the most popular
     names across both years. Print out the top 10 names in a nicely
-    formatted table for both years. Include a table caption.
+    formatted table for both years. Include a table 
+    
+```{r}
+df4 <- df3 %>% group_by(Vorname) %>% summarize(Gesamtanzahl = sum(Anzahl))
+head(df4, n=5)
+df5 <- df4 %>% arrange(desc(Gesamtanzahl))
+head(df5, n=5)
+library(knitr)
+kable(df5, caption = "Top 10 Names Across Both Years")
+```
+    
 
 ## Exercise 4: Chat GPT + apply (3 points)
 
@@ -168,9 +185,55 @@ column_means \<- lapply(tax_data\[, -1\], 2, mean)
 
 column_means
 
+The provided code attempts to use the lapply() function, but it is not suitable for calculating column-wise means in this case because it is missing the correct syntax. The second argument of lapply() should be a function, not a constant value.
+
+To calculate column-wise means in a data frame, you can use the colMeans() function. Here's the corrected code that calculates column-wise means:
+
+```{r}
+# Create a sample data frame
+tax_data <- data.frame(
+  Name = c("Munich GmbH", "ABC Inc.", "Backpacks 1980", "Bavarian Circus"),
+  Tax_2019 = c(5000, 4000, 6000, 3500),
+  Tax_2020 = c(4800, 4200, 5800, 3700),
+  Tax_2021 = c(5200, 3800, 5900, 3400)
+)
+
+# Calculate column-wise means
+column_means <- colMeans(tax_data[, -1])
+
+# Print the column-wise means
+print(column_means)
+```
+
+
 b)  Using ChatGPT try to understand what the rapply() function does.
     Create an easy example with mock data where the function is used and
     explain it in your words.
+    
+    The rapply() function in R is a recursive version of the lapply() function. It is used to apply a function to each element of a nested list or other recursive data structures.
+
+Let's create an easy example to demonstrate the usage of rapply() with mock data:
+
+```{r}
+# Create a nested list
+nested_list <- list(
+  a = 1,
+  b = list(
+    c = 2,
+    d = list(
+      e = 3,
+      f = 4
+    )
+  )
+)
+
+# Apply a function to each element in the nested list
+result <- rapply(nested_list, function(x) x^2)
+
+# Print the result
+print(result)
+```
+
 
 ## Final Note
 
