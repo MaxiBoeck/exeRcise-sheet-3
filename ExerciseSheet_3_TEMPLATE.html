@@ -558,7 +558,7 @@ head(df4, n=5)</code></pre>
 df6 &lt;-head(df5, n=10)
 library(knitr)</code></pre>
 <pre><code>## Warning: Paket &#39;knitr&#39; wurde unter R Version 4.2.3 erstellt</code></pre>
-<pre class="r"><code>kable(df6, max.rows=6, caption = &quot;Top 10 Names Across Both Years&quot;)</code></pre>
+<pre class="r"><code>kable(df6, caption = &quot;Top 10 Names Across Both Years&quot;)</code></pre>
 <table>
 <caption>Top 10 Names Across Both Years</caption>
 <thead>
@@ -626,8 +626,7 @@ not work. Correct the code. Also calculate the rowwise means.</li>
 3500), Tax_2020 = c(4800, 4200, 5800, 3700), Tax_2021 = c(5200, 3800,
 5900, 3400) )</p>
 <p>###Calculate column-wise means</p>
-<p>column_means &lt;- lapply(tax_data<span class="math display">\[,
--1\]</span>, 2, mean)</p>
+<p>column_means &lt;- lapply(tax_data, -1, 2, mean)</p>
 <p>column_means</p>
 <p>The provided code attempts to use the lapply() function, but it is
 not suitable for calculating column-wise means in this case because it

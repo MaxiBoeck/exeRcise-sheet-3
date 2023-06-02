@@ -158,7 +158,7 @@ head(df4, n=5)
 df5 <- df4 %>% arrange(desc(Gesamtanzahl))
 df6 <-head(df5, n=10)
 library(knitr)
-kable(df6, max.rows=6, caption = "Top 10 Names Across Both Years")
+kable(df6, caption = "Top 10 Names Across Both Years")
 ```
     
 
@@ -180,7 +180,7 @@ Tax_2020 = c(4800, 4200, 5800, 3700), Tax_2021 = c(5200, 3800, 5900,
 
 ###Calculate column-wise means
 
-column_means \<- lapply(tax_data\[, -1\], 2, mean)
+column_means \<- lapply(tax_data, -1, 2, mean)
 
 column_means
 
