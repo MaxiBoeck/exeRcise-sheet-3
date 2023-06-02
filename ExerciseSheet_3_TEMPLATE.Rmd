@@ -61,9 +61,13 @@ a)  Create a new repository on GitHub in your account named
     `exeRcise-sheet-3`. Make sure you create a **public repository** so
     we are able to see it for grading. Add the link to the repository
     below:
+    
+    https://github.com/MaxiBoeck/exeRcise-sheet-3.git
+    
 b)  Push your code to this new repository by copying and executing the
     snippet on github listed under
     `…or push an existing repository from the command line`.
+    
 c)  Regularly push your latest changes to GitHub again and especially do
     so when you are finished with this sheet.
 
@@ -78,19 +82,65 @@ Link: <https://opendata.muenchen.de/dataset/vornamen-von-neugeborenen>
 a)  Download the data for both years and track it in git. For small
     datasets like these adding them to git is not a problem.
 
+
 b)  Load the data for both years into R. Check the type of the count
     variable ("Anzahl") and look into the data to determine why it is
     not numeric? Fix the problem in an appropriate manner, it is OK if
     some of the counts are inaccurate because of this. Explain your
     solution and the repercussions.
 
+
+
+```{r}
+df <-read.csv("vornamen_2021.csv")
+df2 <-read.csv("open_data_portal_2022.csv") 
+head(df, n=5)
+head(df2, n=5)
+```
+Ab einer zu kleinen Anzahl, ab 4 oder weniger, wurden Kleiner-Relationen eingeführt.
+```{r}
+df$Anzahl[df$Anzahl == '4 oder weniger'] <- '4'
+df2$Anzahl[df2$Anzahl == '4 oder weniger'] <- '4'
+df$Anzahl <- as.numeric(df$Anzahl)
+head(df, n=5)
+df2$Anzahl <- as.numeric(df2$Anzahl)
+head(df2, n=5)
+```
+Solution: To set the Phrase "4 or less" to a numeric character we need to convert it into numbers, luckily there is no entrie in both dataframes in the column Anzahl with only the number 4 so for convienice we set the phrase "4 or less" to 4. Sadly it is not possible to set the phrase to something like <4, when we want to set the column Anzahl to a numeric type.
+
 c)  Calculate the total number of babies born in Munich in 2022
     and 2021. Which year had the bigger baby-boom?
+    
+```{r}
+total_babies_2021 <- sum(df$Anzahl)
+total_babies_2021
+total_babies_2022 <-sum(df2$Anzahl)
+total_babies_2022
+if (total_babies_2022 > total_babies_2021) {
+  print("The year2022 had a bigger baby boom than 2021")
+} else {
+  print("The year 2021 had a bigger baby boom than 2022")
+}
+```
 
 d)  Add a new column `year` to both datasets which holds the correct
     year for each.
+    
+```{r}
+df$Year <-c(2021)
+df2$Year <-c(2022)
+head(df, n=2)
+head(df2, n=2)
+```
+    
 
 e)  Combine both datasets into one using `bind_rows()`.
+
+```{r}
+df3 <-bind_rows(df, df2)
+head(df3, n=5)
+```
+
 
 f)  Combine the counts for same names to determine the most popular
     names across both years. Print out the top 10 names in a nicely
