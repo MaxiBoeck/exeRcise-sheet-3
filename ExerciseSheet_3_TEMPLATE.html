@@ -11,7 +11,7 @@
 
 <meta name="author" content="Ella Bauer (11927761), Maxi Böck (12466170)" />
 
-<meta name="date" content="2023-06-01" />
+<meta name="date" content="2023-06-02" />
 
 <title>Exercise #3</title>
 
@@ -354,7 +354,7 @@ display: none;
 <h3 class="subtitle">Fortgeschrittene Statistische Software für NF - SS
 2022/23</h3>
 <h4 class="author">Ella Bauer (11927761), Maxi Böck (12466170)</h4>
-<h4 class="date">2023-06-01</h4>
+<h4 class="date">2023-06-02</h4>
 
 </div>
 
@@ -419,15 +419,16 @@ files, as we only want to track the source files themselves.</li>
 <h2>Exercise 2: Putting your Repository on GitHub (3.5 Points)</h2>
 <p>For this task you will upload your solution to GitHub.</p>
 <ol style="list-style-type: lower-alpha">
-<li>Create a new repository on GitHub in your account named
+<li><p>Create a new repository on GitHub in your account named
 <code>exeRcise-sheet-3</code>. Make sure you create a <strong>public
 repository</strong> so we are able to see it for grading. Add the link
-to the repository below:</li>
-<li>Push your code to this new repository by copying and executing the
-snippet on github listed under
-<code>…or push an existing repository from the command line</code>.</li>
-<li>Regularly push your latest changes to GitHub again and especially do
-so when you are finished with this sheet.</li>
+to the repository below:</p>
+<p><a href="https://github.com/MaxiBoeck/exeRcise-sheet-3.git" class="uri">https://github.com/MaxiBoeck/exeRcise-sheet-3.git</a></p></li>
+<li><p>Push your code to this new repository by copying and executing
+the snippet on github listed under
+<code>…or push an existing repository from the command line</code>.</p></li>
+<li><p>Regularly push your latest changes to GitHub again and especially
+do so when you are finished with this sheet.</p></li>
 </ol>
 </div>
 <div id="exercise-3-baby-names-in-munich-4.5-points" class="section level2">
@@ -444,16 +445,171 @@ variable (“Anzahl”) and look into the data to determine why it is not
 numeric? Fix the problem in an appropriate manner, it is OK if some of
 the counts are inaccurate because of this. Explain your solution and the
 repercussions.</p></li>
-<li><p>Calculate the total number of babies born in Munich in 2022 and
-2021. Which year had the bigger baby-boom?</p></li>
-<li><p>Add a new column <code>year</code> to both datasets which holds
-the correct year for each.</p></li>
-<li><p>Combine both datasets into one using
-<code>bind_rows()</code>.</p></li>
-<li><p>Combine the counts for same names to determine the most popular
-names across both years. Print out the top 10 names in a nicely
-formatted table for both years. Include a table caption.</p></li>
 </ol>
+<pre class="r"><code>df &lt;-read.csv(&quot;vornamen_2021.csv&quot;)
+df2 &lt;-read.csv(&quot;open_data_portal_2022.csv&quot;) 
+head(df, n=5)</code></pre>
+<pre><code>##   Vorname Anzahl Geschlecht
+## 1  Emilia    131          w
+## 2    Anna    106          w
+## 3    Emma     98          w
+## 4    Mila     83          w
+## 5   Marie     80          w</code></pre>
+<pre class="r"><code>head(df2, n=5)</code></pre>
+<pre><code>##   Vorname Anzahl Geschlecht
+## 1  Emilia    103          w
+## 2    Emma    101          w
+## 3     Mia     93          w
+## 4  Sophia     78          w
+## 5    Anna     72          w</code></pre>
+<p>Ab einer zu kleinen Anzahl, ab 4 oder weniger, wurden
+Kleiner-Relationen eingeführt.</p>
+<pre class="r"><code>df$Anzahl[df$Anzahl == &#39;4 oder weniger&#39;] &lt;- &#39;4&#39;
+df2$Anzahl[df2$Anzahl == &#39;4 oder weniger&#39;] &lt;- &#39;4&#39;
+df$Anzahl &lt;- as.numeric(df$Anzahl)
+head(df, n=5)</code></pre>
+<pre><code>##   Vorname Anzahl Geschlecht
+## 1  Emilia    131          w
+## 2    Anna    106          w
+## 3    Emma     98          w
+## 4    Mila     83          w
+## 5   Marie     80          w</code></pre>
+<pre class="r"><code>df2$Anzahl &lt;- as.numeric(df2$Anzahl)
+head(df2, n=5)</code></pre>
+<pre><code>##   Vorname Anzahl Geschlecht
+## 1  Emilia    103          w
+## 2    Emma    101          w
+## 3     Mia     93          w
+## 4  Sophia     78          w
+## 5    Anna     72          w</code></pre>
+<p>Solution: To set the Phrase “4 or less” to a numeric character we
+need to convert it into numbers, luckily there is no entrie in both
+dataframes in the column Anzahl with only the number 4 so for convienice
+we set the phrase “4 or less” to 4. Sadly it is not possible to set the
+phrase to something like &lt;4, when we want to set the column Anzahl to
+a numeric type.</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Calculate the total number of babies born in Munich in 2022 and
+2021. Which year had the bigger baby-boom?</li>
+</ol>
+<pre class="r"><code>total_babies_2021 &lt;- sum(df$Anzahl)
+total_babies_2021</code></pre>
+<pre><code>## [1] 26620</code></pre>
+<pre class="r"><code>total_babies_2022 &lt;-sum(df2$Anzahl)
+total_babies_2022</code></pre>
+<pre><code>## [1] 25199</code></pre>
+<pre class="r"><code>if (total_babies_2022 &gt; total_babies_2021) {
+  print(&quot;The year2022 had a bigger baby boom than 2021&quot;)
+} else {
+  print(&quot;The year 2021 had a bigger baby boom than 2022&quot;)
+}</code></pre>
+<pre><code>## [1] &quot;The year 2021 had a bigger baby boom than 2022&quot;</code></pre>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Add a new column <code>year</code> to both datasets which holds the
+correct year for each.</li>
+</ol>
+<pre class="r"><code>df$Year &lt;-c(2021)
+df2$Year &lt;-c(2022)
+head(df, n=2)</code></pre>
+<pre><code>##   Vorname Anzahl Geschlecht Year
+## 1  Emilia    131          w 2021
+## 2    Anna    106          w 2021</code></pre>
+<pre class="r"><code>head(df2, n=2)</code></pre>
+<pre><code>##   Vorname Anzahl Geschlecht Year
+## 1  Emilia    103          w 2022
+## 2    Emma    101          w 2022</code></pre>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Combine both datasets into one using <code>bind_rows()</code>.</li>
+</ol>
+<pre class="r"><code>library(dplyr)</code></pre>
+<pre><code>## Warning: Paket &#39;dplyr&#39; wurde unter R Version 4.2.3 erstellt</code></pre>
+<pre><code>## 
+## Attache Paket: &#39;dplyr&#39;</code></pre>
+<pre><code>## Die folgenden Objekte sind maskiert von &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## Die folgenden Objekte sind maskiert von &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>df3 &lt;-bind_rows(df, df2)
+head(df3, n=5)</code></pre>
+<pre><code>##   Vorname Anzahl Geschlecht Year
+## 1  Emilia    131          w 2021
+## 2    Anna    106          w 2021
+## 3    Emma     98          w 2021
+## 4    Mila     83          w 2021
+## 5   Marie     80          w 2021</code></pre>
+<ol start="6" style="list-style-type: lower-alpha">
+<li>Combine the counts for same names to determine the most popular
+names across both years. Print out the top 10 names in a nicely
+formatted table for both years. Include a table</li>
+</ol>
+<pre class="r"><code>df4 &lt;- df3 %&gt;% group_by(Vorname) %&gt;% summarize(Gesamtanzahl = sum(Anzahl))
+head(df4, n=5)</code></pre>
+<pre><code>## # A tibble: 5 × 2
+##   Vorname  Gesamtanzahl
+##   &lt;chr&gt;           &lt;dbl&gt;
+## 1 Aadhidev            4
+## 2 Aadhya              4
+## 3 Aadish              4
+## 4 Aadvik              4
+## 5 Aadya               4</code></pre>
+<pre class="r"><code>df5 &lt;- df4 %&gt;% arrange(desc(Gesamtanzahl))
+df6 &lt;-head(df5, n=10)
+library(knitr)</code></pre>
+<pre><code>## Warning: Paket &#39;knitr&#39; wurde unter R Version 4.2.3 erstellt</code></pre>
+<pre class="r"><code>kable(df6, max.rows=6, caption = &quot;Top 10 Names Across Both Years&quot;)</code></pre>
+<table>
+<caption>Top 10 Names Across Both Years</caption>
+<thead>
+<tr class="header">
+<th align="left">Vorname</th>
+<th align="right">Gesamtanzahl</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Maximilian</td>
+<td align="right">240</td>
+</tr>
+<tr class="even">
+<td align="left">Emilia</td>
+<td align="right">234</td>
+</tr>
+<tr class="odd">
+<td align="left">Felix</td>
+<td align="right">220</td>
+</tr>
+<tr class="even">
+<td align="left">Anton</td>
+<td align="right">206</td>
+</tr>
+<tr class="odd">
+<td align="left">Emma</td>
+<td align="right">199</td>
+</tr>
+<tr class="even">
+<td align="left">Leon</td>
+<td align="right">195</td>
+</tr>
+<tr class="odd">
+<td align="left">Noah</td>
+<td align="right">185</td>
+</tr>
+<tr class="even">
+<td align="left">Jakob</td>
+<td align="right">180</td>
+</tr>
+<tr class="odd">
+<td align="left">Anna</td>
+<td align="right">178</td>
+</tr>
+<tr class="even">
+<td align="left">Lukas</td>
+<td align="right">173</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="exercise-4-chat-gpt-apply-3-points" class="section level2">
 <h2>Exercise 4: Chat GPT + apply (3 points)</h2>
@@ -473,11 +629,57 @@ not work. Correct the code. Also calculate the rowwise means.</li>
 <p>column_means &lt;- lapply(tax_data<span class="math display">\[,
 -1\]</span>, 2, mean)</p>
 <p>column_means</p>
+<p>The provided code attempts to use the lapply() function, but it is
+not suitable for calculating column-wise means in this case because it
+is missing the correct syntax. The second argument of lapply() should be
+a function, not a constant value.</p>
+<p>To calculate column-wise means in a data frame, you can use the
+colMeans() function. Here’s the corrected code that calculates
+column-wise means:</p>
+<pre class="r"><code># Create a sample data frame
+tax_data &lt;- data.frame(
+  Name = c(&quot;Munich GmbH&quot;, &quot;ABC Inc.&quot;, &quot;Backpacks 1980&quot;, &quot;Bavarian Circus&quot;),
+  Tax_2019 = c(5000, 4000, 6000, 3500),
+  Tax_2020 = c(4800, 4200, 5800, 3700),
+  Tax_2021 = c(5200, 3800, 5900, 3400)
+)
+
+# Calculate column-wise means
+column_means &lt;- colMeans(tax_data[, -1])
+
+# Print the column-wise means
+print(column_means)</code></pre>
+<pre><code>## Tax_2019 Tax_2020 Tax_2021 
+##     4625     4625     4575</code></pre>
 <ol start="2" style="list-style-type: lower-alpha">
-<li>Using ChatGPT try to understand what the rapply() function does.
+<li><p>Using ChatGPT try to understand what the rapply() function does.
 Create an easy example with mock data where the function is used and
-explain it in your words.</li>
+explain it in your words.</p>
+<p>The rapply() function in R is a recursive version of the lapply()
+function. It is used to apply a function to each element of a nested
+list or other recursive data structures.</p></li>
 </ol>
+<p>Let’s create an easy example to demonstrate the usage of rapply()
+with mock data:</p>
+<pre class="r"><code># Create a nested list
+nested_list &lt;- list(
+  a = 1,
+  b = list(
+    c = 2,
+    d = list(
+      e = 3,
+      f = 4
+    )
+  )
+)
+
+# Apply a function to each element in the nested list
+result &lt;- rapply(nested_list, function(x) x^2)
+
+# Print the result
+print(result)</code></pre>
+<pre><code>##     a   b.c b.d.e b.d.f 
+##     1     4     9    16</code></pre>
 </div>
 <div id="final-note" class="section level2">
 <h2>Final Note</h2>

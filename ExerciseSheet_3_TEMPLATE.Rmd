@@ -137,7 +137,7 @@ head(df2, n=2)
 e)  Combine both datasets into one using `bind_rows()`.
 
 ```{r setup, include=FALSE}
-install.packages("dplyr")
+#install.packages("dplyr")
 ```
 
 
@@ -145,7 +145,6 @@ install.packages("dplyr")
 library(dplyr)
 df3 <-bind_rows(df, df2)
 head(df3, n=5)
-df3
 ```
 
 
@@ -157,9 +156,9 @@ f)  Combine the counts for same names to determine the most popular
 df4 <- df3 %>% group_by(Vorname) %>% summarize(Gesamtanzahl = sum(Anzahl))
 head(df4, n=5)
 df5 <- df4 %>% arrange(desc(Gesamtanzahl))
-head(df5, n=5)
+df6 <-head(df5, n=10)
 library(knitr)
-kable(df5, caption = "Top 10 Names Across Both Years")
+kable(df6, max.rows=6, caption = "Top 10 Names Across Both Years")
 ```
     
 
